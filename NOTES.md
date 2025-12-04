@@ -45,18 +45,18 @@
 
 ## What I Would Do With More Time
 
+**Frontend:**
 - Add loading states with skeleton loaders while fetching data
 - Implement active filter tags display with remove functionality
 - Add Jobs filter section with job_id checkboxes
-- Add action buttons (Generate Report, Add Candidate, Bulk Actions)
 - Implement URL state management to persist filters/page in URL
-- Add unit tests for backend filtering/sorting logic
-- Add React component tests with Testing Library
-- Improve accessibility (ARIA labels, keyboard navigation for filters)
-- Add animations for smoother transitions
-- Implement optimistic UI updates
-- Add request cancellation for rapid filter changes
-- Better empty state message
+- Add unit tests with React Testing Library
+
+**Backend:**
+- Add input validation for sort_by and sort_order parameters
+- Implement response caching to improve performance
+- Add proper error handling with HTTP status codes
+- Add unit tests for filtering and sorting logic
 
 ## Libraries/Packages Added
 
