@@ -5,9 +5,15 @@ import { CollapsibleSection } from './CollapsibleSection';
 interface SidebarProps {
   searchValue: string;
   onSearchChange: (value: string) => void;
+  filters: {
+    application_type: string[];
+    source: string[];
+  };
+  onFilterChange: (filterType: 'application_type' | 'source', value: string, checked: boolean) => void;
+  onResetFilters: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ searchValue, onSearchChange }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ searchValue, onSearchChange, filters, onFilterChange, onResetFilters }) => {
   const [fullTextSearch, setFullTextSearch] = useState(false);
 
   return (
@@ -50,40 +56,93 @@ export const Sidebar: React.FC<SidebarProps> = ({ searchValue, onSearchChange })
       {/* Filter Sections */}
       <div className="mt-6">
         <CollapsibleSection title="Application Type">
-          {/* TODO: Add filter checkboxes here */}
+          <div className="space-y-2">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={filters.application_type.includes('active')}
+                onChange={(e) => onFilterChange('application_type', 'active', e.target.checked)}
+                className="w-4 h-4"
+              />
+              <span className="text-[13px] text-[#333333]">Active</span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={filters.application_type.includes('archived')}
+                onChange={(e) => onFilterChange('application_type', 'archived', e.target.checked)}
+                className="w-4 h-4"
+              />
+              <span className="text-[13px] text-[#333333]">Archived</span>
+            </label>
+          </div>
         </CollapsibleSection>
 
         <CollapsibleSection title="Jobs">
-          {/* TODO: Add filter checkboxes here */}
         </CollapsibleSection>
 
         <CollapsibleSection title="CRM">
-          {/* TODO: Add filter checkboxes here */}
         </CollapsibleSection>
 
         <CollapsibleSection title="Profile Details">
-          {/* TODO: Add filter checkboxes here */}
         </CollapsibleSection>
 
         <CollapsibleSection title="Source">
-          {/* TODO: Add filter checkboxes here */}
+          <div className="space-y-2">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={filters.source.includes('LinkedIn')}
+                onChange={(e) => onFilterChange('source', 'LinkedIn', e.target.checked)}
+                className="w-4 h-4"
+              />
+              <span className="text-[13px] text-[#333333]">LinkedIn</span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={filters.source.includes('Indeed')}
+                onChange={(e) => onFilterChange('source', 'Indeed', e.target.checked)}
+                className="w-4 h-4"
+              />
+              <span className="text-[13px] text-[#333333]">Indeed</span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={filters.source.includes('Career Page')}
+                onChange={(e) => onFilterChange('source', 'Career Page', e.target.checked)}
+                className="w-4 h-4"
+              />
+              <span className="text-[13px] text-[#333333]">Career Page</span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={filters.source.includes('Referral')}
+                onChange={(e) => onFilterChange('source', 'Referral', e.target.checked)}
+                className="w-4 h-4"
+              />
+              <span className="text-[13px] text-[#333333]">Referral</span>
+            </label>
+          </div>
         </CollapsibleSection>
 
         <CollapsibleSection title="Responsibility">
-          {/* TODO: Add filter checkboxes here */}
         </CollapsibleSection>
 
         <CollapsibleSection title="Pipeline Tasks">
-          {/* TODO: Add filter checkboxes here */}
         </CollapsibleSection>
 
         <CollapsibleSection title="Education">
-          {/* TODO: Add filter checkboxes here */}
         </CollapsibleSection>
       </div>
 
       {/* Reset Filters Button */}
-      <button className="mt-6 w-full px-4 py-2 text-[#3574d6] text-[13.9px] font-light flex items-center justify-center gap-2 hover:underline">
+      <button 
+        onClick={onResetFilters}
+        className="mt-6 w-full px-4 py-2 text-[#3574d6] text-[13.9px] font-light flex items-center justify-center gap-2 hover:underline"
+      >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
         </svg>

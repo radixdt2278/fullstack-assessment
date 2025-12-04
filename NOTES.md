@@ -1,59 +1,69 @@
 # Submission Notes
 
-**TEMPLATE - Complete this form when submitting your work**
-
 **Candidate Name**: [Your Name]
-**Date**: [Date]
-**Time Spent**: [Approximate hours]
+**Date**: December 4, 2025
+**Time Spent**: ~1.5 hours
 
 ## What I Completed
 
 ### Frontend
-- [ ] Sidebar search input
-- [ ] Full Text Search toggle
-- [ ] Sort dropdown
-- [ ] Collapsible filter sections
-- [ ] Reset Filters button
-- [ ] Candidate list display
-- [ ] Candidate card components
-- [ ] Pagination component
-- [ ] Search filtering functionality
-- [ ] Sort functionality
-- [ ] Pagination logic
+- [x] Sidebar search input (pre-built, wired to API)
+- [x] Full Text Search toggle (visual only, pre-built)
+- [x] Sort dropdown (visual only, backend handles default sorting)
+- [x] Collapsible filter sections (pre-built)
+- [x] Reset Filters button (fully functional)
+- [x] Candidate list display (pre-built)
+- [x] Candidate card components (pre-built)
+- [x] Pagination component (pre-built, wired to API)
+- [x] Search filtering functionality (debounced, case-insensitive)
+- [x] Sort functionality (backend handles default: last_activity desc)
+- [x] Pagination logic (server-side with proper state management)
+- [x] Filter checkboxes - Application Type (Active/Archived)
+- [x] Filter checkboxes - Source (LinkedIn, Indeed, Career Page, Referral)
+- [x] API integration with useEffect
+- [x] Error handling in API calls
+- [x] useCallback optimization to prevent unnecessary re-renders
 
 ### Backend
-- [ ] GET /api/candidates endpoint
-- [ ] Filtering by search term
-- [ ] Sorting logic
-- [ ] Pagination logic
-- [ ] CORS configuration
+- [x] GET /api/candidates endpoint
+- [x] Filtering by search term (name, position, company - case-insensitive)
+- [x] Filtering by application_type (list parameter)
+- [x] Filtering by source (list parameter)
+- [x] Filtering by job_id (exact match)
+- [x] Sorting by last_activity (date field, asc/desc)
+- [x] Sorting by name (alphabetical, case-insensitive, asc/desc)
+- [x] Pagination logic (correct slicing with metadata)
+- [x] Response format (candidates, total, page, per_page, total_pages)
+- [x] Edge case handling (out of bounds pages, empty results)
+- [x] CORS configuration (localhost:5173)
 
 ### Styling
-- [ ] Visual accuracy to design
-- [ ] Hover states
-- [ ] Focus states
-- [ ] Responsive layout (if attempted)
+- [x] Visual accuracy to design (pre-built components match Figma)
+- [x] Hover states (pre-built)
+- [x] Focus states (pre-built)
+- [ ] Responsive layout (not attempted - desktop only per requirements)
 
 ## What I Would Do With More Time
 
-[List features, improvements, or refactorings you would add if you had more time]
-
-Examples:
-- Add loading states with skeleton loaders
-- Implement more robust error handling
-- Add unit tests for components
-- Improve accessibility (ARIA labels, keyboard navigation)
-- Add animations for better UX
-- Implement URL state management
-- Add more filter categories
-- etc.
+- Add loading states with skeleton loaders while fetching data
+- Implement active filter tags display with remove functionality
+- Add Jobs filter section with job_id checkboxes
+- Add action buttons (Generate Report, Add Candidate, Bulk Actions)
+- Implement URL state management to persist filters/page in URL
+- Add unit tests for backend filtering/sorting logic
+- Add React component tests with Testing Library
+- Improve accessibility (ARIA labels, keyboard navigation for filters)
+- Add animations for smoother transitions
+- Implement optimistic UI updates
+- Add request cancellation for rapid filter changes
+- Better empty state message
 
 ## Libraries/Packages Added
 
-[If you added any packages beyond the starter, list them here with explanations]
-
-Example:
-- `package-name` - Used for [specific purpose]
+No additional packages were added beyond the starter dependencies. The implementation uses:
+- React built-in hooks (useState, useEffect, useCallback)
+- Native fetch API for HTTP requests
+- URLSearchParams for query string building
 
 ## AI Tools Used
 
