@@ -67,18 +67,15 @@ No additional packages were added beyond the starter dependencies. The implement
 
 ## AI Tools Used
 
-[If you used any AI tools (ChatGPT, Copilot, Claude, etc.), note which ones and how]
-
-Examples:
-- Used GitHub Copilot for autocompletion
-- Used ChatGPT to debug a TypeScript error
-- Used Claude to understand FastAPI query parameters
-- etc.
+- Used Kiro AI assistant to summarize and understand requirements faster
+- AI helped with implementation guidance
+- AI provided backend code optimization (single-pass filtering, early returns)
+- Used AI for detailed commit message generation
 
 ## Challenges & Solutions
 
-[Optional: Describe any challenges you faced and how you solved them]
+None - Implementation was straightforward following the requirements and hints provided.
 
 ## Additional Notes
 
-[Any other notes you'd like to share about your implementation]
+None

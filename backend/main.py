@@ -44,55 +44,42 @@ def get_candidates(
 ):
     """
     Get paginated and filtered candidates
-
-    YOUR TASK: Implement a complete backend API with:
-    1. Multi-field filtering (search, application_type, source, job_id)
-    2. Flexible sorting (by last_activity or name, asc or desc)
-    3. Server-side pagination
-    4. Proper response formatting
-
-    This is the core of the fullstack assessment!
     """
 
     candidates = load_candidates()
 
-    if search:
-        search_lower = search.lower()
-        candidates = [c for c in candidates
-                      if search_lower in c['name'].lower() or
-                         search_lower in c['position'].lower() or
-                         search_lower in c['company'].lower()]
+    search_lower = search.lower() if search else None
 
-    if application_type:
-        candidates = [c for c in candidates
-                      if c['application_type'] in application_type]
+    candidates = [
+        c for c in candidates
+        if (not search_lower or
+            search_lower in c['name'].lower() or
+            search_lower in c['position'].lower() or
+            search_lower in c['company'].lower())
+        and (not application_type or c['application_type'] in application_type)
+        and (not source or c['source'] in source)
+        and (not job_id or c['job_id'] == job_id)
+    ]
 
-    if source:
-        candidates = [c for c in candidates
-                      if c['source'] in source]
+    if not candidates:
+        return {
+            "candidates": [],
+            "total": 0,
+            "page": page,
+            "per_page": per_page,
+            "total_pages": 0
+        }
 
-    if job_id:
-        candidates = [c for c in candidates
-                      if c['job_id'] == job_id]
-
-    if sort_by == 'last_activity':
-        candidates = sorted(
-            candidates,
-            key=lambda x: x['last_activity'],
-            reverse=(sort_order == 'desc')
-        )
-    elif sort_by == 'name':
-        candidates = sorted(
-            candidates,
-            key=lambda x: x['name'].lower(),
-            reverse=(sort_order == 'desc')
-        )
+    reverse = (sort_order == 'desc')
+    if sort_by == 'name':
+        candidates.sort(key=lambda x: x['name'].lower(), reverse=reverse)
+    else:
+        candidates.sort(key=lambda x: x['last_activity'], reverse=reverse)
 
     total = len(candidates)
     total_pages = (total + per_page - 1) // per_page
     start_idx = (page - 1) * per_page
-    end_idx = start_idx + per_page
-    paginated_candidates = candidates[start_idx:end_idx]
+    paginated_candidates = candidates[start_idx:start_idx + per_page]
 
     return {
         "candidates": paginated_candidates,
