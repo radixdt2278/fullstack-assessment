@@ -1,6 +1,6 @@
 # Submission Notes
 
-**Candidate Name**: [Your Name]
+**Candidate Name**: Kuldipsinh Zala
 **Date**: December 4, 2025
 **Time Spent**: ~1.5 hours
 
