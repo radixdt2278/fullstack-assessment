@@ -15,7 +15,10 @@ export const SearchInput: React.FC<SearchInputProps> = ({
 }) => {
   const [localValue, setLocalValue] = useState(value);
 
-  // Debounce the onChange callback
+  useEffect(() => {
+    setLocalValue(value);
+  }, [value]);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       onChange(localValue);
