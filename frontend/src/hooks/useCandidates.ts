@@ -7,7 +7,9 @@ import { DEFAULT_PER_PAGE } from '../constants/config';
 export const useCandidates = (
   searchValue: string,
   currentPage: number,
-  filters: CandidateFilters
+  filters: CandidateFilters,
+  sortBy: string = 'last_activity',
+  sortOrder: string = 'desc'
 ) => {
   const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [total, setTotal] = useState(0);
@@ -25,6 +27,8 @@ export const useCandidates = (
           page: currentPage,
           per_page: DEFAULT_PER_PAGE,
           search: searchValue || undefined,
+          sort_by: sortBy,
+          sort_order: sortOrder,
           application_type: filters.application_type.length > 0 ? filters.application_type : undefined,
           source: filters.source.length > 0 ? filters.source : undefined,
         });
@@ -41,7 +45,7 @@ export const useCandidates = (
     };
 
     fetchCandidates();
-  }, [currentPage, searchValue, filters.application_type.join(','), filters.source.join(',')]);
+  }, [currentPage, searchValue, sortBy, sortOrder, filters.application_type.join(','), filters.source.join(',')]);
 
   return { candidates, total, totalPages, loading, error };
 };

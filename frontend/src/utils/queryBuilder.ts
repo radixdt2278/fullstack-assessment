@@ -10,6 +10,14 @@ export const buildQueryString = (params: CandidateQueryParams): string => {
     urlParams.append('search', params.search);
   }
 
+  if (params.sort_by) {
+    urlParams.append('sort_by', params.sort_by);
+  }
+
+  if (params.sort_order) {
+    urlParams.append('sort_order', params.sort_order);
+  }
+
   params.application_type?.forEach(type => {
     urlParams.append('application_type', type);
   });

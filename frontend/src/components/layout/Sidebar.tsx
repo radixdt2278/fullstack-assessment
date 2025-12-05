@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { SearchInput } from '../common/SearchInput';
 import { CollapsibleSection } from '../common/CollapsibleSection';
+import { Dropdown } from '../common/Dropdown';
 
 interface SidebarProps {
   searchValue: string;
@@ -11,10 +12,22 @@ interface SidebarProps {
   };
   onFilterChange: (filterType: 'application_type' | 'source', value: string, checked: boolean) => void;
   onResetFilters: () => void;
+  sortBy: string;
+  sortOrder: string;
+  onSortChange: (sortBy: string, sortOrder: string) => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ searchValue, onSearchChange, filters, onFilterChange, onResetFilters }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ searchValue, onSearchChange, filters, onFilterChange, onResetFilters, sortBy, sortOrder, onSortChange }) => {
   const [fullTextSearch, setFullTextSearch] = useState(false);
+
+  const sortOptions = [
+    { label: 'Last Activity (new to old)', value: 'last_activity_desc', onClick: () => onSortChange('last_activity', 'desc') },
+    { label: 'Last Activity (old to new)', value: 'last_activity_asc', onClick: () => onSortChange('last_activity', 'asc') },
+    { label: 'Name (A to Z)', value: 'name_asc', onClick: () => onSortChange('name', 'asc') },
+    { label: 'Name (Z to A)', value: 'name_desc', onClick: () => onSortChange('name', 'desc') },
+  ];
+
+  const currentSortLabel = sortOptions.find(opt => opt.value === `${sortBy}_${sortOrder}`)?.label || 'Last Activity (new to old)';
 
   return (
     <aside className="w-[248px] bg-[#f7f8f7] min-h-screen px-6 pt-2 pb-6">
@@ -42,12 +55,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ searchValue, onSearchChange, f
       </div>
 
       <div className="mt-4">
-        <div className="w-full h-[36px] px-3 flex items-center justify-between border border-[#e1e1e1] bg-white rounded text-[14px] text-[#333333]">
-          <span className="truncate">Last Activity (new to old)</span>
-          <svg className="w-3.5 h-3.5 text-[#909090] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-          </svg>
-        </div>
+        <Dropdown label={currentSortLabel} options={sortOptions} variant="secondary" />
       </div>
 
       <div className="mt-6">
@@ -124,7 +132,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ searchValue, onSearchChange, f
         <CollapsibleSection title="Education" />
       </div>
 
-      <button 
+      <button
         onClick={onResetFilters}
         className="mt-6 w-full px-4 py-2 text-[#3574d6] text-[13.9px] font-light flex items-center justify-center gap-2 hover:underline"
       >

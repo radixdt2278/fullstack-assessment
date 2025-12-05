@@ -3,15 +3,29 @@ import './App.css';
 import { Sidebar } from './components/layout/Sidebar';
 import { CandidateCard } from './components/candidate/CandidateCard';
 import { Pagination } from './components/common/Pagination';
+import { FilterTag } from './components/common/FilterTag';
+import { ActionButtons } from './components/common/ActionButtons';
+import { CandidateListSkeleton } from './components/common/CandidateSkeleton';
 import { useCandidates } from './hooks/useCandidates';
 import { useFilters } from './hooks/useFilters';
+import { useUrlState } from './hooks/useUrlState';
 
 function App() {
   const [searchValue, setSearchValue] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortBy, setSortBy] = useState('last_activity');
+  const [sortOrder, setSortOrder] = useState('desc');
   
   const { filters, handleFilterChange, resetFilters } = useFilters();
-  const { candidates, total, totalPages, loading, error } = useCandidates(searchValue, currentPage, filters);
+  const { candidates, total, totalPages, loading, error } = useCandidates(searchValue, currentPage, filters, sortBy, sortOrder);
+  
+  useUrlState(currentPage, searchValue, filters, setCurrentPage, setSearchValue, (newFilters) => {
+    Object.entries(newFilters).forEach(([key, values]) => {
+      values.forEach((value: string) => {
+        handleFilterChange(key as 'application_type' | 'source', value, true);
+      });
+    });
+  });
 
   const handleSearchChange = useCallback((value: string) => {
     setSearchValue(value);
@@ -20,6 +34,12 @@ function App() {
 
   const handlePageChange = useCallback((page: number) => {
     setCurrentPage(page);
+  }, []);
+
+  const handleSortChange = useCallback((newSortBy: string, newSortOrder: string) => {
+    setSortBy(newSortBy);
+    setSortOrder(newSortOrder);
+    setCurrentPage(1);
   }, []);
 
   const handleResetFilters = useCallback(() => {
@@ -39,13 +59,54 @@ function App() {
           filters={filters}
           onFilterChange={handleFilterChange}
           onResetFilters={handleResetFilters}
+          sortBy={sortBy}
+          sortOrder={sortOrder}
+          onSortChange={handleSortChange}
         />
 
         <main className="flex-1 px-6">
-          <div className="mb-4 flex items-center gap-4 mt-[9px]">
-            <p className="text-[13.8px] text-[#222222]">
-              {loading ? 'Loading...' : `Showing ${total} candidate applications`}
-            </p>
+          <div className="mb-4 flex items-center justify-between mt-[9px]">
+            <div className="flex items-center gap-3">
+              <p className="text-[13.8px] text-[#222222]">
+                {loading ? 'Loading...' : `Showing ${total} candidate applications`}
+              </p>
+              
+              {(searchValue || filters.application_type.length > 0 || filters.source.length > 0) && (
+                <div className="flex items-center gap-2">
+                  {searchValue && (
+                    <FilterTag
+                      label={`Search: "${searchValue}"`}
+                      onRemove={() => {
+                        setSearchValue('');
+                        setCurrentPage(1);
+                      }}
+                    />
+                  )}
+                  {filters.application_type.map(type => (
+                    <FilterTag
+                      key={type}
+                      label={type.charAt(0).toUpperCase() + type.slice(1)}
+                      onRemove={() => {
+                        handleFilterChange('application_type', type, false);
+                        setCurrentPage(1);
+                      }}
+                    />
+                  ))}
+                  {filters.source.map(src => (
+                    <FilterTag
+                      key={src}
+                      label={src}
+                      onRemove={() => {
+                        handleFilterChange('source', src, false);
+                        setCurrentPage(1);
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+            
+            <ActionButtons />
           </div>
 
           {error && (
@@ -61,7 +122,9 @@ function App() {
             </div>
           </div>
 
-          {candidates.length > 0 ? (
+          {loading ? (
+            <CandidateListSkeleton count={5} />
+          ) : candidates.length > 0 ? (
             <div className="bg-white border-l border-r border-[#e1e1e1]">
               {candidates.map((candidate) => (
                 <CandidateCard key={candidate.id} candidate={candidate} />
@@ -69,7 +132,7 @@ function App() {
             </div>
           ) : (
             <p className="text-center text-gray-500 py-8 bg-white border border-[#e1e1e1]">
-              {loading ? 'Loading...' : 'No candidates found.'}
+              No candidates found.
             </p>
           )}
 

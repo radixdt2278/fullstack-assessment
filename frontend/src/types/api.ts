@@ -15,6 +15,8 @@ export interface CandidateQueryParams {
   page: number;
   per_page: number;
   search?: string;
+  sort_by?: string;
+  sort_order?: string;
   application_type?: string[];
   source?: string[];
 }
