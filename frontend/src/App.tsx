@@ -1,57 +1,17 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import './App.css';
-import { Sidebar } from './components/Sidebar';
-import { CandidateCard } from './components/CandidateCard';
-import { Pagination } from './components/Pagination';
-import type { Candidate } from './types/candidate';
+import { Sidebar } from './components/layout/Sidebar';
+import { CandidateCard } from './components/candidate/CandidateCard';
+import { Pagination } from './components/common/Pagination';
+import { useCandidates } from './hooks/useCandidates';
+import { useFilters } from './hooks/useFilters';
 
 function App() {
   const [searchValue, setSearchValue] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [candidates, setCandidates] = useState<Candidate[]>([]);
-  const [totalPages, setTotalPages] = useState(1);
-  const [total, setTotal] = useState(0);
-  const [filters, setFilters] = useState<{
-    application_type: string[];
-    source: string[];
-  }>({
-    application_type: [],
-    source: [],
-  });
-
-  useEffect(() => {
-    const fetchCandidates = async () => {
-      try {
-        const params = new URLSearchParams({
-          page: currentPage.toString(),
-          per_page: '5',
-        });
-
-        if (searchValue) {
-          params.append('search', searchValue);
-        }
-
-        filters.application_type.forEach(type => {
-          params.append('application_type', type);
-        });
-
-        filters.source.forEach(src => {
-          params.append('source', src);
-        });
-
-        const response = await fetch(`http://localhost:8000/api/candidates?${params}`);
-        const data = await response.json();
-
-        setCandidates(data.candidates);
-        setTotalPages(data.total_pages);
-        setTotal(data.total);
-      } catch (error) {
-        console.error('Error fetching candidates:', error);
-      }
-    };
-
-    fetchCandidates();
-  }, [currentPage, searchValue, filters.application_type, filters.source]);
+  
+  const { filters, handleFilterChange, resetFilters } = useFilters();
+  const { candidates, total, totalPages, loading, error } = useCandidates(searchValue, currentPage, filters);
 
   const handleSearchChange = useCallback((value: string) => {
     setSearchValue(value);
@@ -62,32 +22,17 @@ function App() {
     setCurrentPage(page);
   }, []);
 
-  const handleFilterChange = (filterType: 'application_type' | 'source', value: string, checked: boolean) => {
-    setFilters(prev => ({
-      ...prev,
-      [filterType]: checked
-        ? [...prev[filterType], value]
-        : prev[filterType].filter(v => v !== value)
-    }));
-    setCurrentPage(1);
-  };
-
-  const handleResetFilters = () => {
-    setFilters({
-      application_type: [],
-      source: [],
-    });
+  const handleResetFilters = useCallback(() => {
+    resetFilters();
     setSearchValue('');
     setCurrentPage(1);
-  };
+  }, [resetFilters]);
 
   return (
     <div className="min-h-screen bg-[#f7f8f7]">
-      {/* Page Title */}
       <h1 className="text-[34.59px] font-normal text-[#15372c] px-6 pt-4 pb-3 leading-[46.67px]">All Candidates</h1>
 
       <div className="flex">
-        {/* Sidebar with pre-built components */}
         <Sidebar
           searchValue={searchValue}
           onSearchChange={handleSearchChange}
@@ -96,18 +41,19 @@ function App() {
           onResetFilters={handleResetFilters}
         />
 
-        {/* Main Content */}
         <main className="flex-1 px-6">
-
-          {/* Results Summary */}
           <div className="mb-4 flex items-center gap-4 mt-[9px]">
             <p className="text-[13.8px] text-[#222222]">
-              Showing {total} candidate applications
+              {loading ? 'Loading...' : `Showing ${total} candidate applications`}
             </p>
-            {/* TODO: Add action buttons (Generate Report, Add Candidate, Bulk Actions) */}
           </div>
 
-          {/* Candidate List Header */}
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
+              {error}
+            </div>
+          )}
+
           <div className="bg-neutral-50 border border-[#e1e1e1] border-b-0 rounded-t mb-0">
             <div className="grid grid-cols-[360px_1fr] h-[40px]">
               <div className="px-[15px] text-[12.4px] font-normal text-[#909090] flex items-center border-r border-[#e1e1e1]">Name</div>
@@ -115,7 +61,6 @@ function App() {
             </div>
           </div>
 
-          {/* Candidate List */}
           {candidates.length > 0 ? (
             <div className="bg-white border-l border-r border-[#e1e1e1]">
               {candidates.map((candidate) => (
@@ -124,11 +69,10 @@ function App() {
             </div>
           ) : (
             <p className="text-center text-gray-500 py-8 bg-white border border-[#e1e1e1]">
-              No candidates found.
+              {loading ? 'Loading...' : 'No candidates found.'}
             </p>
           )}
 
-          {/* Pagination */}
           {totalPages > 1 && (
             <Pagination
               currentPage={currentPage}

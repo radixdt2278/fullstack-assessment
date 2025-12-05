@@ -9,17 +9,14 @@ export const Pagination: React.FC<PaginationProps> = ({
   totalPages,
   onPageChange,
 }) => {
-  // Generate array of page numbers to display
   const getPageNumbers = () => {
     const pages: (number | string)[] = [];
 
     if (totalPages <= 9) {
-      // Show all pages if 9 or fewer
       for (let i = 1; i <= totalPages; i++) {
         pages.push(i);
       }
     } else {
-      // Show 1-9, ..., last 2 pages
       for (let i = 1; i <= Math.min(9, totalPages); i++) {
         pages.push(i);
       }
@@ -37,7 +34,6 @@ export const Pagination: React.FC<PaginationProps> = ({
 
   return (
     <div className="flex items-center justify-center gap-0 mt-8 h-[36px]">
-      {/* Previous Button */}
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
@@ -48,7 +44,6 @@ export const Pagination: React.FC<PaginationProps> = ({
         </svg>
       </button>
 
-      {/* Page Numbers */}
       {pages.map((page, idx) => {
         if (page === '...') {
           return (
@@ -76,7 +71,6 @@ export const Pagination: React.FC<PaginationProps> = ({
         );
       })}
 
-      {/* Next Button */}
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}

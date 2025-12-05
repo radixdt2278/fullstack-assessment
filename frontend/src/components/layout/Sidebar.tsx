@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { SearchInput } from './SearchInput';
-import { CollapsibleSection } from './CollapsibleSection';
+import { SearchInput } from '../common/SearchInput';
+import { CollapsibleSection } from '../common/CollapsibleSection';
 
 interface SidebarProps {
   searchValue: string;
@@ -18,10 +18,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ searchValue, onSearchChange, f
 
   return (
     <aside className="w-[248px] bg-[#f7f8f7] min-h-screen px-6 pt-2 pb-6">
-      {/* Search Input */}
       <SearchInput value={searchValue} onChange={onSearchChange} />
 
-      {/* Full Text Search Toggle */}
       <div className="mt-2">
         <div className="flex items-center gap-2">
           <label className="relative inline-flex items-center cursor-pointer">
@@ -43,7 +41,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ searchValue, onSearchChange, f
         <p className="text-[11.6px] text-[#909090] font-light leading-[12px] mt-1">(Includes resumes and notes)</p>
       </div>
 
-      {/* Sort Dropdown (visual only) */}
       <div className="mt-4">
         <div className="w-full h-[36px] px-3 flex items-center justify-between border border-[#e1e1e1] bg-white rounded text-[14px] text-[#333333]">
           <span className="truncate">Last Activity (new to old)</span>
@@ -53,7 +50,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ searchValue, onSearchChange, f
         </div>
       </div>
 
-      {/* Filter Sections */}
       <div className="mt-6">
         <CollapsibleSection title="Application Type">
           <div className="space-y-2">
@@ -78,14 +74,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ searchValue, onSearchChange, f
           </div>
         </CollapsibleSection>
 
-        <CollapsibleSection title="Jobs">
-        </CollapsibleSection>
-
-        <CollapsibleSection title="CRM">
-        </CollapsibleSection>
-
-        <CollapsibleSection title="Profile Details">
-        </CollapsibleSection>
+        <CollapsibleSection title="Jobs" />
+        <CollapsibleSection title="CRM" />
+        <CollapsibleSection title="Profile Details" />
 
         <CollapsibleSection title="Source">
           <div className="space-y-2">
@@ -128,17 +119,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ searchValue, onSearchChange, f
           </div>
         </CollapsibleSection>
 
-        <CollapsibleSection title="Responsibility">
-        </CollapsibleSection>
-
-        <CollapsibleSection title="Pipeline Tasks">
-        </CollapsibleSection>
-
-        <CollapsibleSection title="Education">
-        </CollapsibleSection>
+        <CollapsibleSection title="Responsibility" />
+        <CollapsibleSection title="Pipeline Tasks" />
+        <CollapsibleSection title="Education" />
       </div>
 
-      {/* Reset Filters Button */}
       <button 
         onClick={onResetFilters}
         className="mt-6 w-full px-4 py-2 text-[#3574d6] text-[13.9px] font-light flex items-center justify-center gap-2 hover:underline"

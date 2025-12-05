@@ -1,4 +1,4 @@
-import type { Candidate } from '../types/candidate';
+import type { Candidate } from '../../types/candidate';
 
 interface CandidateCardProps {
   candidate: Candidate;
@@ -7,9 +7,7 @@ interface CandidateCardProps {
 export const CandidateCard: React.FC<CandidateCardProps> = ({ candidate }) => {
   return (
     <div className="border-b border-gray-200">
-      {/* Main Row */}
       <div className="grid grid-cols-[345px_1fr] py-5">
-        {/* Left Column - Name & Position */}
         <div className="px-5">
           <a
             href="#"
@@ -24,7 +22,6 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({ candidate }) => {
           )}
         </div>
 
-        {/* Right Column - Job & Status */}
         <div className="px-4">
           <p className="text-sm text-gray-900 mt-1">{candidate.job_title}</p>
           <a
@@ -37,7 +34,6 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({ candidate }) => {
         </div>
       </div>
 
-      {/* Status Row */}
       <div className="grid grid-cols-[345px_1fr] py-2.5 bg-gray-50">
         <div className="px-5 flex items-center">
           <span className="text-sm text-gray-700">{candidate.status}</span>
@@ -53,7 +49,6 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({ candidate }) => {
         </div>
       </div>
 
-      {/* Availability Section (if applicable) */}
       {candidate.has_availability && (
         <div className="grid grid-cols-[345px_1fr] py-3 border-t border-gray-200">
           <div className="px-5" />
@@ -73,7 +68,6 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({ candidate }) => {
         </div>
       )}
 
-      {/* Interviews Section (if applicable) */}
       {candidate.has_interviews && candidate.interviews && (
         <>
           <div className="grid grid-cols-[345px_1fr] py-2.5 border-t border-gray-200">
